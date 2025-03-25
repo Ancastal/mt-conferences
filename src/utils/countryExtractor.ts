@@ -1,11 +1,18 @@
+import { Conference } from "@/types/conference";
+
 /**
- * Extracts country from a conference place string
+ * Extracts country from a conference place string or a conference object
  */
-export function extractCountry(place: string): string | null {
-  if (!place) return null;
+export function extractCountry(input: string | Conference): string | null {
+  // If input is a Conference object, use its country property
+  if (typeof input !== 'string') {
+    return input.country || null;
+  }
+  
+  if (!input) return null;
   
   // Extract the last part after the last comma, which is typically the country
-  const parts = place.split(',');
+  const parts = input.split(',');
   let country = parts[parts.length - 1].trim();
   
   // Handle special cases like "USA" which might appear in different forms
@@ -28,7 +35,7 @@ export function extractCountry(place: string): string | null {
     ];
     
     for (const country of knownCountries) {
-      if (place.includes(country)) {
+      if (input.includes(country)) {
         return country;
       }
     }
@@ -40,7 +47,7 @@ export function extractCountry(place: string): string | null {
 /**
  * Gets all unique countries from conferences data
  */
-export function getAllCountries(conferences: any[]): string[] {
+export function getAllCountries(conferences: Conference[]): string[] {
   if (!Array.isArray(conferences)) return [];
   
   const countries = new Set<string>();

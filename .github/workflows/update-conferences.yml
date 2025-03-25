@@ -7,7 +7,9 @@ on:
   workflow_dispatch:  # Allow manual trigger
   pull_request:
     paths:
-      - 'src/data/conferences.yml'
+      - 'src/data/conferences/*.yml'
+  schedule:
+    - cron: '0 0 * * 1'  # Run every Monday at midnight
 
 jobs:
   update-conferences:

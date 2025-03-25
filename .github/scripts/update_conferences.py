@@ -1,5 +1,6 @@
 import yaml
 import requests
+import os
 from datetime import datetime
 from typing import Dict, List, Any
 
@@ -160,12 +161,56 @@ def transform_conference_data(conferences: List[Dict[str, Any]]) -> List[Dict[st
     return transformed
 
 
+def load_existing_conferences() -> Dict[str, Any]:
+    """Load all existing conference files."""
+    conferences_dir = 'src/data/conferences'
+    current_conf_dict = {}
+    
+    # Create the directory if it doesn't exist
+    if not os.path.exists(conferences_dir):
+        os.makedirs(conferences_dir)
+        return current_conf_dict
+    
+    # Read all YAML files in the conferences directory
+    for filename in os.listdir(conferences_dir):
+        if filename.endswith('.yml'):
+            with open(os.path.join(conferences_dir, filename), 'r') as f:
+                try:
+                    conf = yaml.safe_load(f)
+                    if conf and 'id' in conf:
+                        current_conf_dict[conf['id']] = conf
+                except Exception as e:
+                    print(f"Error loading {filename}: {e}")
+    
+    return current_conf_dict
+
+
+def save_conference_file(conference: Dict[str, Any]):
+    """Save a conference to its own YAML file."""
+    conferences_dir = 'src/data/conferences'
+    conf_id = conference['id']
+    file_path = os.path.join(conferences_dir, f"{conf_id}.yml")
+    
+    # Write to file with proper formatting
+    with open(file_path, 'w') as f:
+        yaml_str = yaml.dump(
+            conference,
+            allow_unicode=True,
+            sort_keys=False,
+            default_flow_style=False,
+            explicit_start=False,
+            explicit_end=False,
+            width=float("inf"),
+            indent=2,
+            default_style=None,
+        )
+        f.write(yaml_str)
+
+
 def main():
     try:
-        # Fetch current conferences.yml
-        current_file = 'src/data/conferences.yml'
-        with open(current_file, 'r') as f:
-            current_conferences = yaml.safe_load(f)
+        # Fetch existing conferences from individual files
+        current_conf_dict = load_existing_conferences()
         
         # Fetch and transform new data
         new_conferences = fetch_conference_files()
@@ -178,11 +223,11 @@ def main():
             print("Warning: No conferences transformed")
             return
         
-        # Create a dictionary of current conferences by ID
-        current_conf_dict = {conf['id']: conf for conf in current_conferences}
-        
         # Create a set of existing conference title+year combinations to check for duplicates
-        existing_conf_keys = {(conf['title'], conf['year']) for conf in current_conferences}
+        existing_conf_keys = {(conf['title'], conf['year']) for conf in current_conf_dict.values()}
+        
+        # Track changes for git
+        changes_made = False
         
         # Update or add new conferences while preserving existing ones
         for new_conf in transformed_conferences:
@@ -198,13 +243,23 @@ def main():
                 # Update existing conference while preserving fields
                 curr_conf = current_conf_dict[new_conf['id']]
                 
+                # Check if there are actual changes to avoid unnecessary file writes
+                need_update = False
+                for key, value in new_conf.items():
+                    if key not in curr_conf or curr_conf[key] != value:
+                        need_update = True
+                        break
+                
+                if not need_update:
+                    continue
+                
                 # Preserve existing fields
                 preserved_fields = [
                     'tags', 'venue', 'hindex', 'submission_deadline',
                     'timezone_submission', 'rebuttal_period_start',
                     'rebuttal_period_end', 'final_decision_date',
                     'review_release_date', 'commitment_deadline',
-                    'start', 'end', 'note', 'city', 'country'  # Added city and country to preserved fields
+                    'start', 'end', 'note', 'city', 'country'
                 ]
                 for field in preserved_fields:
                     if field in curr_conf:
@@ -222,40 +277,24 @@ def main():
                 
                 # Update the conference in the dictionary
                 current_conf_dict[new_conf['id']] = new_conf
+                changes_made = True
             else:
                 # Add new conference to the dictionary
                 current_conf_dict[new_conf['id']] = new_conf
                 # Add to our set of existing conference keys
                 existing_conf_keys.add(conf_key)
+                changes_made = True
         
-        # Convert back to list and sort by deadline
-        all_conferences = list(current_conf_dict.values())
-        all_conferences.sort(key=lambda x: x.get('deadline', '9999'))
-        
-        # Write back to file with newlines between conferences
-        with open(current_file, 'w') as f:
-            for i, conf in enumerate(all_conferences):
-                if i > 0:
-                    f.write('\n\n')  # Add two newlines between conferences
-                
-                yaml_str = yaml.dump(
-                    [conf],
-                    allow_unicode=True,
-                    sort_keys=False,
-                    default_flow_style=False,
-                    explicit_start=False,
-                    explicit_end=False,
-                    width=float("inf"),
-                    indent=2,
-                    default_style=None,
-                )
-                f.write(yaml_str.rstrip())  # Remove trailing whitespace
+        # Only update if changes were made
+        if changes_made:
+            # Save each conference to its own file
+            for conf in current_conf_dict.values():
+                save_conference_file(conf)
             
-            # Add final newline
-            f.write('\n')
+            print(f"Updated {len(current_conf_dict)} conference files.")
+        else:
+            print("No changes needed.")
             
-        print(f"Successfully updated {len(all_conferences)} conferences")
-        
     except Exception as e:
         print(f"Error: {e}")
         raise

@@ -1,70 +1,74 @@
-import { useState } from "react";
-import conferencesData from "@/data/conferences.yml";
-import { Conference } from "@/types/conference";
-import { Calendar as CalendarIcon, Tag, X, Plus } from "lucide-react"; // Added X and Plus imports
-import { Calendar } from "@/components/ui/calendar";
-import { parseISO, format, isValid, isSameMonth, isSameYear, isSameDay, isSameWeek } from "date-fns";
-import { Toggle } from "@/components/ui/toggle";
 import Header from "@/components/Header";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Conference } from "@/types/conference";
+import { loadConferences } from "@/utils/conferenceLoader";
+import { format, isSameDay, isValid, parseISO } from "date-fns";
+import { Plus, Tag, X } from "lucide-react"; // Added X and Plus imports
+import { useMemo, useState } from "react";
 
 const categoryColors: Record<string, string> = {
-  "machine-learning": "bg-purple-500",
-  "computer-vision": "bg-orange-500",
+  "machine-translation": "bg-emerald-500",
   "natural-language-processing": "bg-blue-500",
-  "robotics": "bg-green-500",
-  "signal-processing": "bg-cyan-500",
+  "computational-linguistics": "bg-indigo-500",
+  "machine-learning": "bg-purple-500",
+  "speech-recognition": "bg-cyan-500",
+  "speech-translation": "bg-teal-500",
+  "multilingual": "bg-sky-500",
+  "language-modeling": "bg-violet-500",
+  "text-generation": "bg-fuchsia-500",
   "data-mining": "bg-pink-500",
-  "reinforcement-learning": "bg-yellow-500",
-  "automated-planning": "bg-amber-500",
   "other": "bg-gray-500"
 };
 
 const categoryNames: Record<string, string> = {
-  "machine-learning": "Machine Learning",
-  "computer-vision": "Computer Vision",
+  "machine-translation": "Machine Translation",
   "natural-language-processing": "NLP",
-  "robotics": "Robotics",
-  "signal-processing": "Speech/Signal Processing",
+  "computational-linguistics": "Comp. Linguistics",
+  "machine-learning": "Machine Learning",
+  "speech-recognition": "Speech Recognition",
+  "speech-translation": "Speech Translation",
+  "multilingual": "Multilingual",
+  "language-modeling": "Language Modeling",
+  "text-generation": "Text Generation",
   "data-mining": "Data Mining",
-  "reinforcement-learning": "Reinforcement Learning",
-  "automated-planning": "Automated Planning",
   "other": "Other"
 };
 
 // Add this array to maintain the exact order we want
 const orderedCategories = [
-  "machine-learning",
-  "computer-vision",
+  "machine-translation",
   "natural-language-processing",
-  "robotics",
-  "reinforcement-learning",
-  "signal-processing",
+  "computational-linguistics",
+  "language-modeling",
+  "multilingual",
+  "speech-translation",
+  "speech-recognition",
+  "text-generation",
+  "machine-learning",
   "data-mining",
-  "automated-planning",
   "other"
-] as const;
+];
 
 const mapLegacyTag = (tag: string): string => {
-  const legacyTagMapping: Record<string, string> = {
-    "web-search": "other",
-    "human-computer-interaction": "other",
-    "computer-graphics": "other",
-    // reinforcement-learning is already a proper tag, so no mapping needed
-    // Add any other legacy mappings here
-  };
-  return legacyTagMapping[tag] || tag;
+  if (tag === "nlp" || tag === "language-processing") return "natural-language-processing";
+  if (tag === "translation") return "machine-translation";
+  if (tag === "linguistics") return "computational-linguistics";
+  if (tag.includes("speech")) return "speech-recognition";
+  if (tag.includes("multilingual") || tag.includes("multi-lingual")) return "multilingual";
+  if (tag.includes("language") && tag.includes("model")) return "language-modeling";
+  return tag;
 };
 
 const CalendarPage = () => {
@@ -82,6 +86,9 @@ const CalendarPage = () => {
   const [showDeadlines, setShowDeadlines] = useState(true);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   
+  // Load conferences data
+  const conferencesData = useMemo(() => loadConferences(), []);
+
   const safeParseISO = (dateString: string | undefined | number): Date | null => {
     if (!dateString) return null;
     if (dateString === 'TBD') return null;

@@ -1,7 +1,6 @@
-import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { CalendarDays, Search } from "lucide-react";
 import { Link } from "react-router-dom";
-import { CalendarDays } from "lucide-react";
 
 interface HeaderProps {
   onSearch: (query: string) => void;
@@ -10,25 +9,27 @@ interface HeaderProps {
 
 const Header = ({ onSearch, showEmptyMessage = false }: HeaderProps) => {
   return (
-    <header className="bg-white border-b border-neutral-200">
+    <header className="bg-gradient-to-r from-primary-dark via-primary to-primary-light text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between md:h-16 py-4 md:py-0 gap-4 md:gap-0">
-          <div className="flex items-center justify-center md:justify-start w-full md:w-auto gap-8">
-            <Link to="/" className="flex items-center gap-2">
-              <img 
-                src="https://huggingface.co/front/assets/huggingface_logo.svg" 
-                alt="Hugging Face Logo" 
-                className="h-8 w-8"
-              />
-              <span className="text-2xl font-bold text-primary">
-                <span className="hidden md:inline">AI Conference Deadlines</span>
-                <span className="md:hidden">AI Deadlines</span>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between py-4 gap-4 md:gap-6">
+          <div className="flex items-center justify-center md:justify-start w-full md:w-auto gap-3">
+            <Link to="/" className="flex items-center gap-2 transition-transform hover:scale-105">
+              <div className="bg-white rounded-full p-1.5 flex items-center justify-center">
+                <img 
+                  src="https://huggingface.co/front/assets/huggingface_logo.svg" 
+                  alt="Hugging Face Logo" 
+                  className="h-7 w-7"
+                />
+              </div>
+              <span className="text-2xl font-bold text-white">
+                <span className="hidden md:inline">Machine Translation Deadlines</span>
+                <span className="md:hidden">MT Deadlines</span>
               </span>
             </Link>
-            <nav className="hidden md:flex space-x-4">
+            <nav className="hidden md:flex space-x-4 ml-6">
               <Link
                 to="/calendar"
-                className="text-neutral-600 hover:text-primary flex items-center gap-2"
+                className="text-white/90 hover:text-white flex items-center gap-2 transition-all hover:translate-y-[-2px]"
               >
                 <CalendarDays className="h-5 w-5" />
                 Calendar
@@ -42,76 +43,50 @@ const Header = ({ onSearch, showEmptyMessage = false }: HeaderProps) => {
               </div>
               <Input
                 type="search"
-                placeholder="Search conferences..."
-                className="pl-10 w-full"
+                placeholder="Search MT conferences..."
+                className="pl-10 w-full bg-white/90 border-0 focus-visible:ring-2 focus-visible:ring-white transition-all text-neutral-dark"
                 onChange={(e) => onSearch(e.target.value)}
               />
             </div>
           </div>
         </div>
         {showEmptyMessage && (
-          <div className="max-w-4xl mx-auto mt-2 mb-0 text-center">
-            <p className="text-sm bg-amber-50 text-amber-800 py-2 px-4 rounded-md inline-block">
-              There are no upcoming conferences for the selected categories - enable "Show past conferences" to see previous ones
+          <div className="max-w-4xl mx-auto mt-2 mb-4 text-center">
+            <p className="text-sm bg-amber-50 text-amber-800 py-2 px-4 rounded-md inline-block shadow-sm">
+              There are no upcoming machine translation conferences for the selected categories - enable "Show past conferences" to see previous ones
             </p>
           </div>
         )}
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm text-neutral-600 py-4">
-            Countdowns to top CV/NLP/ML/Robotics/AI conference deadlines. To add/edit a conference, send in a{' '}
+        <div className="max-w-4xl mx-auto text-center py-3 text-white/90">
+          <p className="text-sm">
+            Countdowns to top Machine Translation, NLP, and Computational Linguistics conference deadlines. To add/edit a conference, send in a{' '}
             <a 
               href="https://github.com/huggingface/ai-deadlines"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-white font-medium hover:underline"
             >
               pull request
             </a>.
-            <br />
-            P.S. Is your paper already on Arxiv? Feel free to{' '}
+            <br className="md:hidden" />
+            <span className="hidden md:inline"> · </span>
+            P.S. Have you published a MT paper? Share it on{' '}
             <a
               href="https://hf.co/papers/submit"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              submit
-            </a>
-            {' '}it to{' '}
-            <a
-              href="https://hf.co/papers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-white font-medium hover:underline"
             >
               hf.co/papers
             </a>
-            {' '}and upload your artifacts such as{' '}
+            {' '}and upload your models, datasets, and demos to the{' '}
             <a
-              href="https://huggingface.co/docs/hub/en/models-uploading"
+              href="https://huggingface.co/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-white font-medium hover:underline"
             >
-              models
-            </a>
-            {', '}
-            <a
-              href="https://huggingface.co/docs/datasets/loading"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              datasets
-            </a>
-            {' '}and{' '}
-            <a
-              href="https://huggingface.co/docs/hub/en/spaces-sdks-gradio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              demos
+              Hugging Face Hub
             </a>
           </p>
         </div>

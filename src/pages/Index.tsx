@@ -1,19 +1,16 @@
-import Header from "@/components/Header";
-import FilterBar from "@/components/FilterBar";
 import ConferenceCard from "@/components/ConferenceCard";
-import conferencesData from "@/data/conferences.yml";
-import { Conference } from "@/types/conference";
-import { useState, useMemo, useEffect } from "react";
-import { Switch } from "@/components/ui/switch"
-import { parseISO, isValid, isPast } from "date-fns";
-import { extractCountry } from "@/utils/countryExtractor";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { X, ChevronRight, Filter, Globe } from "lucide-react";
-import { getAllCountries } from "@/utils/countryExtractor";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { Conference } from "@/types/conference";
+import { loadConferences } from "@/utils/conferenceLoader";
+import { extractCountry, getAllCountries } from "@/utils/countryExtractor";
 import { getDeadlineInLocalTime } from "@/utils/dateUtils";
-import { sortConferencesByDeadline } from "@/utils/conferenceUtils";
+import { isPast, isValid, parseISO } from "date-fns";
+import { Globe, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 const Index = () => {
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -21,20 +18,23 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showPastConferences, setShowPastConferences] = useState(false);
 
+  // Load conferences data
+  const conferencesData = useMemo(() => loadConferences(), []);
+
   // Category buttons configuration
   const categoryButtons = [
-    { id: "machine-learning", label: "Machine Learning" },
-    { id: "lifelong-learning", label: "Lifelong Learning" },
-    { id: "robotics", label: "Robotics" },
-    { id: "computer-vision", label: "Computer Vision" },
-    { id: "web-search", label: "Web Search" },
-    { id: "data-mining", label: "Data Mining" },
     { id: "natural-language-processing", label: "Natural Language Processing" },
-    { id: "signal-processing", label: "Signal Processing" },
-    { id: "human-computer-interaction", label: "Human Computer Interaction" },
-    { id: "computer-graphics", label: "Computer Graphics" },
-    { id: "mathematics", label: "Mathematics" },
-    { id: "reinforcement-learning", label: "Reinforcement Learning" },
+    { id: "machine-translation", label: "Machine Translation" },
+    { id: "multilingual", label: "Multilingual" },
+    { id: "speech-recognition", label: "Speech Recognition" },
+    { id: "machine-learning", label: "Machine Learning" },
+    { id: "computational-linguistics", label: "Computational Linguistics" },
+    { id: "language-modeling", label: "Language Modeling" },
+    { id: "text-generation", label: "Text Generation" },
+    { id: "speech-translation", label: "Speech Translation" },
+    { id: "information-retrieval", label: "Information Retrieval" },
+    { id: "multimodal", label: "Multimodal" },
+    { id: "data-mining", label: "Data Mining" },
   ];
 
   const filteredConferences = useMemo(() => {
@@ -43,44 +43,76 @@ const Index = () => {
       return [];
     }
 
+    // Define a list of MT-related tags for auto-selection
+    const mtRelatedTags = ['machine-translation', 'natural-language-processing', 'computational-linguistics'];
+    
+    // Add MT-relevant conferences even if they don't explicitly have MT tags
+    const mtRelevantConferences = ['ACL', 'NAACL', 'EMNLP', 'EACL', 'COLING', 'CoNLL', 'WMT', 'AACL', 'LREC', 'AMTA', 'IWSLT'];
+
     return conferencesData
       .filter((conf: Conference) => {
         // Filter by deadline (past/future)
         const deadlineDate = conf.deadline && conf.deadline !== 'TBD' ? parseISO(conf.deadline) : null;
         const isUpcoming = !deadlineDate || !isValid(deadlineDate) || !isPast(deadlineDate);
         if (!showPastConferences && !isUpcoming) return false;
+        
+        // Apply tag filtering, if selected
+        if (selectedTags.size > 0) {
+          if (!conf.tags || !Array.isArray(conf.tags)) return false;
+          
+          // Check if any selected tag is in the conference tags
+          const hasSelectedTag = Array.from(selectedTags).some(tag => conf.tags?.includes(tag));
+          if (!hasSelectedTag) return false;
+        } else {
+          // If no tags selected, only show MT-relevant conferences by default
+          if (!conf.tags || !Array.isArray(conf.tags)) {
+            // Include based on conference title if it's a known MT-relevant conference
+            const confTitle = conf.title || '';
+            return mtRelevantConferences.some(mtName => confTitle.includes(mtName));
+          }
+          
+          // Show if it has any MT-related tags or is a recognized MT conference
+          const hasMtTag = mtRelatedTags.some(tag => conf.tags?.includes(tag));
+          const confTitle = conf.title || '';
+          const isMtConference = mtRelevantConferences.some(mtName => confTitle.includes(mtName));
+          
+          if (!hasMtTag && !isMtConference) return false;
+        }
+        
+        // Apply country filtering, if selected
+        if (selectedCountries.size > 0) {
+          const country = extractCountry(conf);
+          if (!country || !selectedCountries.has(country)) return false;
+        }
 
-        // Filter by tags
-        const matchesTags = selectedTags.size === 0 || 
-          (Array.isArray(conf.tags) && conf.tags.some(tag => selectedTags.has(tag)));
-        
-        // Filter by countries
-        const matchesCountry = selectedCountries.size === 0 || 
-          (conf.country && selectedCountries.has(conf.country));
-        
-        // Filter by search query
-        const matchesSearch = searchQuery === "" || 
-          conf.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (conf.full_name && conf.full_name.toLowerCase().includes(searchQuery.toLowerCase()));
-        
-        return matchesTags && matchesCountry && matchesSearch;
+        // Apply search filtering
+        if (searchQuery) {
+          const query = searchQuery.toLowerCase();
+          return (
+            (conf.title && conf.title.toLowerCase().includes(query)) ||
+            (conf.full_name && conf.full_name.toLowerCase().includes(query)) ||
+            (conf.city && conf.city.toLowerCase().includes(query)) ||
+            (conf.country && conf.country.toLowerCase().includes(query)) ||
+            (conf.tags && conf.tags.some(tag => tag.toLowerCase().includes(query)))
+          );
+        }
+
+        return true;
       })
       .sort((a: Conference, b: Conference) => {
+        // Sort by deadline (similar to the utility function but for direct comparison)
         const aDeadline = getDeadlineInLocalTime(a.deadline, a.timezone);
         const bDeadline = getDeadlineInLocalTime(b.deadline, b.timezone);
         
-        if (aDeadline && bDeadline) {
-          return aDeadline.getTime() - bDeadline.getTime();
-        }
-        
-        // Handle cases where one or both deadlines are invalid
+        // If either date is invalid, place it later in the list
         if (!aDeadline && !bDeadline) return 0;
         if (!aDeadline) return 1;
         if (!bDeadline) return -1;
         
-        return 0;
+        // Both dates are valid, compare them
+        return aDeadline.getTime() - bDeadline.getTime();
       });
-  }, [selectedTags, selectedCountries, searchQuery, showPastConferences]);
+  }, [conferencesData, selectedTags, selectedCountries, searchQuery, showPastConferences]);
 
   // Update handleTagsChange to handle multiple tags
   const handleTagsChange = (newTags: Set<string>) => {

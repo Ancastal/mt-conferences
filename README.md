@@ -36,35 +36,37 @@ To keep things minimal, we mainly focus on top-tier conferences in AI.
 
 To add or update a deadline:
 - Fork the repository
-- Update [src/data/conferences.yml](src/data/conferences.yml)
+- Create a new file in the `src/data/conferences` directory for a new conference or update an existing file
+- Follow the guidelines in [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions
+- Each conference has its own YAML file, named using the format `<shortname><year>.yml` (e.g., `neurips25.yml`)
 - Make sure it has the `title`, `year`, `id`, `link`, `deadline`, `timezone`, `date`, `city`, `country`, `tags` attributes
     + See available timezone strings [here](https://momentjs.com/timezone/).
 - Optionally add a `venue`, `note` and `abstract_deadline` in case this info is known
 - Optionally add `hindex` (refers to h5-index from [here](https://scholar.google.com/citations?view_op=top_venues&vq=eng))
 - Example:
     ```yaml
-    - title: BestConf
-      year: 2022
-      id: bestconf22  # title as lower case + last two digits of year
-      full_name: Best Conference for Anything  # full conference name
-      link: link-to-website.com
-      deadline: YYYY-MM-DD HH:SS
-      abstract_deadline: YYYY-MM-DD HH:SS
-      timezone: Asia/Seoul
-      city: Incheon
-      country: South Korea
-      venue: Incheon Conference Centre, South Korea
-      date: September, 18-22, 2022
-      start: YYYY-MM-DD
-      end: YYYY-MM-DD
-      paperslink: link-to-full-paper-list.com
-      pwclink: link-to-papers-with-code.com
-      hindex: 100.0
-      tags:
-      - machine learning
-      note: Important
+    title: BestConf
+    year: 2022
+    id: bestconf22  # title as lower case + last two digits of year
+    full_name: Best Conference for Anything  # full conference name
+    link: link-to-website.com
+    deadline: "YYYY-MM-DD HH:SS"
+    abstract_deadline: "YYYY-MM-DD HH:SS"
+    timezone: Asia/Seoul
+    city: Incheon
+    country: South Korea
+    venue: Incheon Conference Centre, South Korea
+    date: September, 18-22, 2022
+    start: "YYYY-MM-DD"
+    end: "YYYY-MM-DD"
+    paperslink: link-to-full-paper-list.com
+    pwclink: link-to-papers-with-code.com
+    hindex: 100.0
+    tags:
+    - machine learning
+    note: Important
     ```
-- Send a pull request to update [src/data/conferences.yml](src/data/conferences.yml).
+- Send a pull request with your changes.
 
 ## How to run locally
 

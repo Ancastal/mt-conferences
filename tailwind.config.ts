@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -26,15 +25,24 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#0284C7", // Darker Ocean Blue
-          light: "#7DD3FC", // Adjusted Light Blue
-          dark: "#075985", // Deeper Dark Blue
+          DEFAULT: "#3B82F6", // Modern bright blue
+          light: "#93C5FD", // Light blue
+          dark: "#1D4ED8", // Deep blue
         },
         neutral: {
-          DEFAULT: "#6B7280",
-          light: "#F9FAFB",
-          dark: "#111827",
+          DEFAULT: "#64748B", // Modern slate
+          light: "#F8FAFC", // Very light slate
+          dark: "#0F172A", // Very dark slate
         },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        card: "0 2px 8px rgba(0, 0, 0, 0.08)",
+        "card-hover": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
       },
       keyframes: {
         "fade-in": {
@@ -45,10 +53,15 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        "pulse-subtle": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.5s ease-out",
         "slide-in": "slide-in 0.3s ease-out",
+        "pulse-subtle": "pulse-subtle 2s infinite cubic-bezier(0.4, 0, 0.6, 1)",
       },
     },
   },

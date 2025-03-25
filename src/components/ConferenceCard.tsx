@@ -1,9 +1,9 @@
-import { CalendarDays, Globe, Tag, Clock, AlarmClock } from "lucide-react";
 import { Conference } from "@/types/conference";
-import { formatDistanceToNow, parseISO, isValid, isPast } from "date-fns";
-import ConferenceDialog from "./ConferenceDialog";
-import { useState } from "react";
 import { getDeadlineInLocalTime } from '@/utils/dateUtils';
+import { formatDistanceToNow, isPast, isValid } from "date-fns";
+import { AlarmClock, CalendarDays, Clock, Globe, Tag } from "lucide-react";
+import { useState } from "react";
+import ConferenceDialog from "./ConferenceDialog";
 
 const ConferenceCard = ({
   title,
@@ -94,10 +94,10 @@ const ConferenceCard = ({
   return (
     <>
       <div 
-        className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 flex flex-col cursor-pointer"
+        className="bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-5 flex flex-col cursor-pointer transform hover:-translate-y-1 border border-neutral-100"
         onClick={handleCardClick}
       >
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-3">
           <h3 className="text-lg font-semibold text-primary">
             {title} {year}
           </h3>
@@ -106,48 +106,49 @@ const ConferenceCard = ({
               href={link}
               target="_blank"
               rel="noopener noreferrer" 
-              className="hover:underline"
+              className="p-2 rounded-full hover:bg-neutral-100 transition-colors"
               onClick={(e) => e.stopPropagation()}
+              aria-label="Visit conference website"
             >
-              <Globe className="h-4 w-4 mr-2 flex-shrink-0" />
+              <Globe className="h-4 w-4 flex-shrink-0 text-primary" />
             </a>
           )}
         </div>
         
-        <div className="flex flex-col gap-2 mb-3">
-          <div className="flex items-center text-neutral">
-            <CalendarDays className="h-4 w-4 mr-2 flex-shrink-0" />
-            <span className="text-sm truncate">{date}</span>
+        <div className="flex flex-col gap-3 mb-4">
+          <div className="flex items-center text-neutral-600">
+            <CalendarDays className="h-4 w-4 mr-2 flex-shrink-0 text-primary-light" />
+            <span className="text-sm">{date}</span>
           </div>
           {location && (
-            <div className="flex items-center text-neutral">
-              <Globe className="h-4 w-4 mr-2 flex-shrink-0" />
-              <span className="text-sm truncate">{location}</span>
+            <div className="flex items-center text-neutral-600">
+              <Globe className="h-4 w-4 mr-2 flex-shrink-0 text-primary-light" />
+              <span className="text-sm">{location}</span>
             </div>
           )}
-          <div className="flex items-center text-neutral">
-            <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
-            <span className="text-sm truncate">
+          <div className="flex items-center text-neutral-600">
+            <Clock className="h-4 w-4 mr-2 flex-shrink-0 text-primary-light" />
+            <span className="text-sm">
               {deadline === 'TBD' ? 'TBD' : deadline}
             </span>
           </div>
           <div className="flex items-center">
             <AlarmClock className={`h-4 w-4 mr-2 flex-shrink-0 ${getCountdownColor()}`} />
-            <span className={`text-sm font-medium truncate ${getCountdownColor()}`}>
+            <span className={`text-sm font-medium ${getCountdownColor()}`}>
               {timeRemaining}
             </span>
           </div>
         </div>
 
         {Array.isArray(tags) && tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-auto pt-2">
             {tags.map((tag) => (
               <button
                 key={tag}
-                className="tag tag-button"
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                 onClick={(e) => handleTagClick(e, tag)}
               >
-                <Tag className="h-3 w-3 mr-1" />
+                <Tag className="h-3 w-3 mr-1.5" />
                 {tag}
               </button>
             ))}

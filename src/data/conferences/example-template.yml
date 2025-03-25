@@ -1,0 +1,70 @@
+# Example Conference Template
+# Copy this file and rename it to your conference ID, e.g. `neurips25.yml`
+# Required fields are marked with (*)
+
+# Conference acronym/short name (*)
+title: ExampleConf
+
+# Year of the conference (*)
+year: 2025
+
+# Unique ID for the conference, typically acronym+year (*)
+id: exampleconf25
+
+# Full conference name (*)
+full_name: Example Conference Name 2025
+
+# Conference website URL (*)
+link: https://example-conference.org/
+
+# Paper submission deadline (*)
+deadline: "2025-03-01 23:59:59"
+
+# Timezone for the deadline (*)
+timezone: UTC-12
+
+# Conference dates (*)
+date: April 15-18, 2025
+
+# Categories/Research areas (*)
+tags:
+  - machine-learning
+  - computer-vision
+  - natural-language-processing
+
+# Host city (*)
+city: San Francisco
+
+# Host country (*)
+country: USA
+
+# Optional: Abstract submission deadline (if different)
+abstract_deadline: "2025-02-20 23:59:59"
+
+# Optional: Conference venue
+venue: San Francisco Convention Center
+
+# Optional: Conference start date (ISO format)
+start: "2025-04-15"
+
+# Optional: Conference end date (ISO format)
+end: "2025-04-18"
+
+# Optional: Conference rankings
+rankings: "CCF: A, CORE: A*"
+
+# Optional: Any special notes about the conference
+note: "Submissions must follow the provided LaTeX template."
+
+# Optional: H-index (h5-index from Google Scholar)
+hindex: 120
+
+# Optional: Rebuttal period
+rebuttal_period_start: "2025-01-15"
+rebuttal_period_end: "2025-01-22"
+
+# Optional: Final decision date
+final_decision_date: "2025-02-15"
+
+# Optional: Review release date
+review_release_date: "2025-01-10" 

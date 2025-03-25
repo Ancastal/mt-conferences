@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -22,8 +22,8 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.75rem;
   }
 
   html, body {
@@ -31,30 +31,51 @@
     -webkit-overflow-scrolling: touch;
     position: relative;
     overscroll-behavior-y: none;
+    @apply bg-neutral-50;
   }
 
   body {
-    @apply bg-neutral-light text-neutral-dark antialiased;
+    @apply text-neutral-dark antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 .conference-card {
-  @apply bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-4 flex flex-col;
+  @apply bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300;
 }
 
 .tag {
-  @apply inline-flex items-center px-2 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary;
+  @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary;
 }
 
 .countdown {
   @apply text-2xl font-semibold text-primary;
 }
 
+/* Modern scroll bar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.primary.light');
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.primary.DEFAULT');
+}
+
 @keyframes scale-up {
   from {
-    transform: scale(0.8);
+    transform: scale(0.95);
     opacity: 0;
-    filter: blur(8px);
+    filter: blur(4px);
   }
   to {
     transform: scale(1);
@@ -70,27 +91,28 @@
     filter: blur(0);
   }
   to {
-    transform: scale(0.8);
+    transform: scale(0.95);
     opacity: 0;
-    filter: blur(8px);
+    filter: blur(4px);
   }
 }
 
 .dialog-content {
-  animation: scale-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scale-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity, filter;
 }
 
 .dialog-overlay {
-  animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(4px);
 }
 
 [data-state="closed"] .dialog-content {
-  animation: scale-down 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scale-down 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-state="closed"] .dialog-overlay {
-  animation: fade-out 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-out 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fade-in {

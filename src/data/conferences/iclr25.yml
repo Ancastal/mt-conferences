@@ -1,0 +1,20 @@
+title: ICLR
+year: 2025
+id: iclr25
+full_name: International Conference on Learning Representations
+link: https://iclr.cc/Conferences/2025
+deadline: "2024-10-01 23:59:59"
+timezone: UTC-12
+date: April 24-28, 2025
+tags:
+  - machine-learning
+  - computer-vision
+  - natural-language-processing
+  - signal-processing
+country: Singapore
+abstract_deadline: "2024-09-27 23:59:59"
+rankings: "CCF: N, CORE: A*, THCPL: A"
+venue: Singapore EXPO - 1 Expo Drive, Singapore
+hindex: 304
+note: Mandatory abstract deadline on September 27, 2024. More info <a href='https://iclr.cc/Conferences/2025/CallForPapers'>here</a>.
+city: Singapore
