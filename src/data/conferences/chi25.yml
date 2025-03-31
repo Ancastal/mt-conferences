@@ -3,16 +3,16 @@ year: 2025
 id: chi25
 full_name: The ACM Conference on Human Factors in Computing Systems
 link: https://chi2025.acm.org/
-deadline: "2024-09-12 23:59:59"
-abstract_deadline: "2024-09-05 23:59:59"
+deadline: '2024-09-12 23:59:59'
+abstract_deadline: '2024-09-05 23:59:59'
 timezone: UTC-12
 city: Yokohama
 country: Japan
 venue: Pacifico Yokohama Conference Center, Yokohama, Japan
 date: April 26 - May 01, 2025
-start: 2025-04-26T00:00:00.000Z
-end: 2025-05-01T00:00:00.000Z
+start: 2025-04-26 00:00:00+00:00
+end: 2025-05-01 00:00:00+00:00
 hindex: 122
 tags:
-  - human-computer-interaction
+- human-computer-interaction
 note: Mandatory abstract deadline on Sep 05, 2024. More info <a href='https://chi2025.acm.org/for-authors/papers/'>here</a>.
