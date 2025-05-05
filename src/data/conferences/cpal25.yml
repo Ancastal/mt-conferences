@@ -3,11 +3,11 @@ year: 2025
 id: cpal25
 full_name: The Conference on Parsimony and Learning
 link: https://cpal.cc/
-deadline: "2024-11-25 23:59:59"
+deadline: '2024-11-25 23:59:59'
 timezone: AoE
 date: March 24-27, 2025
 tags:
-  - machine-learning
+- machine-learning
 city: California
 country: USA
-rankings: "CCF: N, CORE: N, THCPL: N"
+rankings: 'CCF: N, CORE: N, THCPL: N'

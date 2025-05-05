@@ -3,13 +3,13 @@ year: 2025
 id: icassp25
 full_name: International Conference on Acoustics, Speech and Signal Processing
 link: https://2025.ieeeicassp.org/
-deadline: "2024-09-09 23:59:59"
+deadline: '2024-09-09 23:59:59'
 timezone: UTC-12
 city: Hyderabad
 country: India
 venue: Hyderabad International Convention Center, Hyderabad, India
 date: April 6-11, 2025
-start: 2025-04-06T00:00:00.000Z
-end: 2025-04-11T00:00:00.000Z
+start: 2025-04-06 00:00:00+00:00
+end: 2025-04-11 00:00:00+00:00
 tags:
-  - signal-processing
+- signal-processing

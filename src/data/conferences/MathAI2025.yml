@@ -9,12 +9,12 @@ timezone: Russia/Moscow
 city: Sochi
 country: Russia
 date: March, 24-28, 2025
-start: 2025-03-24T00:00:00.000Z
-end: 2025-03-28T00:00:00.000Z
+start: 2025-03-24 00:00:00+00:00
+end: 2025-03-28 00:00:00+00:00
 paperslink: https://openreview.net/group?id=mathai.club/MathAI/2025/Conference
 pwclink: https://openreview.net/group?id=mathai.club/MathAI/2025/Conference
 hindex: 100
 tags:
-  - machine-learning
-  - mathematics
+- machine-learning
+- mathematics
 note: Abstract deadline on February 1, 2025. More info <a href='https://mathai.club/call-for-papers'>here</a>
