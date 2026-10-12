@@ -1,0 +1,25 @@
+title: ExampleConf
+year: 2025
+id: exampleconf25
+full_name: Example Conference Name 2025
+link: https://example-conference.org/
+deadline: '2025-03-01 23:59:59'
+timezone: UTC-12
+date: April 15-18, 2025
+tags:
+- machine-learning
+- computer-vision
+- natural-language-processing
+city: San Francisco
+country: USA
+abstract_deadline: '2025-02-20 23:59:59'
+venue: San Francisco Convention Center
+start: '2025-04-15'
+end: '2025-04-18'
+rankings: 'CCF: A, CORE: A*'
+note: Submissions must follow the provided LaTeX template.
+hindex: 120
+rebuttal_period_start: '2025-01-15'
+rebuttal_period_end: '2025-01-22'
+final_decision_date: '2025-02-15'
+review_release_date: '2025-01-10'
