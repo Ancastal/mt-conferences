@@ -3,13 +3,13 @@ year: 2025
 id: wacv25
 full_name: IEEE/CVF Winter Conference on Applications of Computer Vision
 link: https://wacv2025.thecvf.com/
-deadline: "2024-07-15 23:59:59"
+deadline: '2024-07-15 23:59:59'
 timezone: UTC-7
 date: February 28 - March 4, 2025
 tags:
-  - machine-learning
-  - computer-vision
+- machine-learning
+- computer-vision
 city: Tucson
 country: USA
-rankings: "CCF: N, CORE: A, THCPL: N"
+rankings: 'CCF: N, CORE: A, THCPL: N'
 venue: JW Marriott Starpass in Tucson, Arizona, USA

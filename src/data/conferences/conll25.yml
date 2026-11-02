@@ -8,9 +8,9 @@ timezone: UTC-12
 city: Vienna
 country: Austria
 date: July 31 - August 1, 2025
-start: "2025-07-31"
-end: "2025-08-01"
+start: '2025-07-31'
+end: '2025-08-01'
 tags:
-  - natural-language-processing
-rankings: "CCF: B, CORE: A, THCPL: B"
+- natural-language-processing
+rankings: 'CCF: B, CORE: A, THCPL: B'
 venue: Vienna, Austria

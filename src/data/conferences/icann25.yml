@@ -9,10 +9,10 @@ timezone: UTC-12
 city: Kaunas
 country: Lithuania
 date: September, 9-12, 2025
-start: 2025-09-09T00:00:00.000Z
-end: 2025-09-12T00:00:00.000Z
+start: 2025-09-09 00:00:00+00:00
+end: 2025-09-12 00:00:00+00:00
 paperslink: https://link.springer.com/conference/icann
 hindex: 32
 tags:
-  - machine-learning
+- machine-learning
 note: Deadline for full paper submission extended to 29th March 2025. More info <a href='https://e-nns.org/icann2025'>here</a>.
